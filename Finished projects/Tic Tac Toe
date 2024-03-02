@@ -1,0 +1,70 @@
+import numpy as np 
+import random
+
+def board():
+    return(np.array)([["_","_","_"],
+                     ["_","_","_"],
+                     ["_","_","_"]])
+def display_board(board):
+    for row in board:
+        print(" ".join(row))
+    print()
+
+def player1 (board):
+    while True: 
+        try:
+            move = int(input("Player 1 (X): choose a position (1-9): ")) - 1
+            row, col = divmod(move, 3)
+            if 0 <= row < 3 and 0 <= col < 3 and board[row, col] == "_":
+                board[row, col] = "X"
+                break
+            else:
+                print("Thats not a valid move broski >:(")
+        except ValueError:
+            print("Broski that's not a fucking number")
+
+def Bot(board):
+    while True: 
+        try:
+            move = random.randint(1, 9)- 1
+            row, col = divmod(move, 3)
+            if 0 <= row < 3 and 0 <= col < 3 and board[row, col] == "_":
+                board[row, col] = "O"
+                break
+        except ValueError:
+            print("Broski that's not a fucking number")
+
+def GameOver(board):
+    for i in range(3):
+        if all(board[i, j] == "X" for j in range(3)) or all(board[j, i] == "X" for j in range(3)):
+            return "Player 1 (X) has won"
+        elif all(board[i, j] == "O" for j in range(3)) or all(board[j,
+                                                                     i] == "O" for j in range(3)):
+            return " Bot (O) has won"
+        
+        if all(board[i, i] == "X" for i in range(3)) or all(board[i, 2 - i] == "X" for i in range(3)):
+            return "Player 1 (X) has won!"
+        elif all(board[i, i] == "O" for i in range(3)) or all(board[i, 2 - i] == "O" for i in range(3)):
+            return "Bot (O) has won!"
+        if "_" not in board:
+            return "BRO HOW IT CHOOSES A RANDOM SPOT :skull:"
+    return None
+game_board = board()
+
+for _ in range(5):
+    display_board(game_board)
+    player1(game_board)
+    winner = GameOver(game_board)
+    if winner:
+        print(winner)
+        
+    
+    display_board(game_board)
+    Bot(game_board)
+    winner = GameOver(game_board)
+    if winner:
+        print(winner)
+        
+
+display_board(game_board)
+

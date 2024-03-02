@@ -1,0 +1,78 @@
+import math
+
+def Add(x, y):
+    return x + y 
+
+def Subtract(x, y):
+    return x - y 
+
+def Multiply(x, y):
+    return x * y
+
+def Divide(x, y):
+    return x / y 
+
+def Square(x, y):
+    return pow(x, y) 
+
+def Sqrt(x):
+    return Sqrt(x)
+
+def Sin(x):
+    return Sin(x)
+
+print("What u wanna calculate today")
+print("1. Add")
+print("2. Subtract")
+print("3. Multiply")
+print("4. Divide")
+print("5. Square")
+print("6. Sqrt")
+print("7. Sin")
+print("8. Cos")
+print("9. Tan")
+print("10. Log10")
+
+while True:
+    choice = input("Enter choice: ")
+
+    if choice in ("Add", "Subtract", "Multiply", "Divide", "Square"):
+        try:
+            num1 = float(input("Enter first number: "))
+            num2 = float(input("Enter second number: "))
+        except ValueError:
+            print("Nuh uh that's not a number >:(")
+            continue
+    elif choice in ("Sqrt", "Sin", "Cos", "Tan"):
+        try:
+            num1 = float(input("Enter number: "))
+        except ValueError:
+            print("Nuh uh that's not a number >:( ")
+            continue
+#HAHAHAHA I JUST FUCKING LOVE WRITING IF STATEMENTS send help
+    if choice == "Add":
+        print(num1, "+", num2, "=", Add(num1, num2))
+
+    elif choice == "Subtract":
+        print(num1, "-", num2, "=", Subtract(num1, num2))
+
+    elif choice == "Multiply":
+        print(num1, "*", num2, "=", Multiply(num1, num2))
+
+    elif choice == "Divide":
+        print(num1, "/", num2, "=", Divide(num1, num2))
+    
+    elif choice == "Square":
+        print(num1, "^", num2, "=", Square(num1, num2))
+
+    elif choice == "Sqrt":
+        print("Sqrt", float(num1), "=", math.sqrt(num1))
+    
+    elif choice == "Sin":
+        print("Sin", (float(num1)), "=", math.sin(num1))
+
+    elif choice == "Cos":
+        print("Cos", (float(num1)), "=", math.cos(num1))
+        
+    elif choice == "Tan":
+        print("Tan", (float(num1)), "=", math.tan(num1))

@@ -1,0 +1,27 @@
+import pygame
+
+clock = pygame.time.Clock()
+screen = pygame.display.set_mode([1000, 1000])
+screen.fill((255, 255, 255))
+x = 100
+y = 100
+velocity = 5
+direction = 1  # 1 for moving right, -1 for moving left
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+    
+    x += velocity * direction
+    
+    #reverse the direction if the rectangle reaches the end
+    if x <= 0 or x >= 900:
+        direction *= -1
+    
+    screen.fill((255, 255, 255))
+    rectangle = pygame.draw.rect(screen, (0, 0, 0), (x, y, 100, 100))
+    
+    pygame.display.update()
+    clock.tick(150)
+ 

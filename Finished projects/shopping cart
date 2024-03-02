@@ -1,0 +1,74 @@
+class Shop():
+    def __init__(self, *args, **kwargs):
+        self.shop = {}
+
+    def add_thing(self, thing, amount, price):
+        if thing in self.shop:
+            self.shop[thing] = {"price": price, "amount": amount + self.shop[thing]["amount"]}
+        else:
+            self.shop[thing] = {"price": price, "amount": amount}
+
+    def remove_thing(self, thing, amount):
+        if thing in self.shop:
+            current_amount = self.shop[thing]["amount"]
+            if amount >= current_amount:
+                del self.shop[thing]
+            else:
+                return
+
+    # im so fucking lost on this part 💀
+    def receipt(self):
+        subtotal = 0  
+        for thing in self.shop:
+            subtotal += self.shop[thing]["price"] * self.shop[thing]["amount"]
+            print(f"Subtotal: ${subtotal}")
+            print(f"Stolen by goverment: ${subtotal * 0.06}")
+            print(f"Total: ${subtotal * 1.06}")
+        choice = input("Do you want to convert it to DKK: ")
+        if choice == "yes":
+            print(f"Subtotal: {float(subtotal)*6.91}Kr")
+            print(f"Stolen by goverment: {float(subtotal) * 0.20 * 6.91}Kr")
+            print(f"Total: {float(subtotal) * 1.20 * 6.91}Kr")
+
+    def CoversionToDkk(self):
+        pass
+
+
+def indkøbsvogn():
+    Indkøbsvogn = Shop()
+
+    while True:
+        print("1. Add Thing")
+        print("2. Remove Thing")
+        print("3. Print Receipt")
+        print("4. Leave Shop")
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            print("What Item would you like to buy?")
+            thing = input("Item: ")
+            amount = int(input("Amount: "))
+            price = float(input("Price per item: "))
+            Indkøbsvogn.add_thing(thing, amount, price)
+            print(f"{thing} has been added to your cart")
+
+        elif choice == "2":
+            print("What item would you like to remove?")
+            thing = input("Item: ")
+            amount = int(input("Amount: "))
+            Indkøbsvogn.remove_thing(thing, amount)
+            print(f"{thing} has been removed from your cart")
+
+        elif choice == "3":
+            Indkøbsvogn.receipt()
+            
+        elif choice == "4":
+            print("Thank you for shopping. Goodbye!")
+            break
+
+        else:
+            print("Invalid choice. Please enter a valid option.")
+
+
+if __name__ == "__main__":
+    indkøbsvogn()
