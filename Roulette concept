@@ -1,0 +1,54 @@
+import pygame
+import random
+
+pygame.init()
+
+clock = pygame.time.Clock()
+screen = pygame.display.set_mode([1700, 1000])
+screen.fill((255, 255, 255))
+
+rectangles = []
+for i in range(11):
+    x = 100 + i * 150
+    y = 0
+    colour = random.randint(1, 14)
+    rectangles.append((x, y, colour))
+
+velocity = 5
+direction = 1  # 1 for moving right, -1 for moving left
+running = True
+
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+    
+    # Update the position of each rectangle
+    for i in range(len(rectangles)):
+        x, y, colour = rectangles[i]
+        x += velocity * direction
+        
+        # Reverse the direction if the rectangle reaches the end
+        if x >= 1700:
+            x = 0
+        
+        rectangles[i] = (x, y, colour)
+    
+    screen.fill((255, 255, 255))
+
+    # Change the color of the rectangle based on the random number 
+    for i in range(len(rectangles)):
+        x, y, colour = rectangles[i]
+        if colour in range(1, 8):
+            colour = "red"
+        elif colour in range(8, 14):
+            colour = "black"
+        elif colour == 14:
+            colour = "green"
+        rectangles[i] = (x, y, colour)
+    
+    # Draw each rectangle
+    for x, y, colour in rectangles:
+        rectangle = pygame.draw.rect(screen, pygame.Color(colour), (x, y, 100, 100))
+    clock.tick(60)
+    pygame.display.update()
