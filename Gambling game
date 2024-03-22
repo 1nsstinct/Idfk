@@ -1,0 +1,236 @@
+import pygame
+import random
+
+from pygame.locals import (
+    K_SPACE,
+    K_UP,
+    K_DOWN,
+    KEYDOWN,
+    QUIT
+)
+
+pygame.init()
+
+currency = 200
+main_menu_loaded = False
+running = True
+clock = pygame.time.Clock()
+
+
+def MainMenu():
+    image = pygame.image.load("game im making/Untitled.png")
+    screen.blit(image, (0, 0))
+    pygame.display.update()
+
+class roullete:
+    def __init__(self, screen, currency):
+        self.screen = screen
+        self.currency = currency
+        self.running = True
+        self.cdisplay = pygame.font.Font(None, 36)
+    
+    def rectangle_generation(self):
+        rectangles = []
+        for i in range(11):
+            x = 100 + i * 150
+            y = 0
+            colour = random.randint(1, 14)
+            rectangles.append((x, y, colour))
+        return rectangles
+    def handle_space(self):
+        self.currency += 100
+    def handle_down(self):
+        pass
+    def handle_up(self):
+        pass
+    
+    def run(self):
+        self.rectangles = self.rectangle_generation()
+        while self.currency > 0 and self.running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+            for i in range(len(self.rectangles)):
+                x, y, colour = self.rectangles[i]
+                x += 5
+                if x >= 1700:
+                    x = 0
+                self.rectangles[i] = (x, y, colour)
+            screen.fill((255, 255, 255))
+            for i in range(len(self.rectangles)):
+                x, y, colour = self.rectangles[i]
+                if colour in range(1, 8):
+                    colour = "red"
+                elif colour in range(8, 14):
+                    colour = "black"
+                elif colour == 14:
+                    colour = "green"
+                self.rectangles[i] = (x, y, colour)
+            for x, y, colour in self.rectangles:
+                rectangle = pygame.draw.rect(self.screen, pygame.Color(colour), (x, y, 100, 100))
+            clock.tick(60)
+            pygame.display.update()
+        pygame.quit()
+
+
+    
+
+class ClawMachine:
+    class loot:
+        def __init__(self):
+            self.lootx = random.randint(200, 1400)
+            self.looty = 600
+
+    class Claw:
+        def __init__(self):
+            self.x = 100
+            self.y = 100
+            self.velocityx = 5
+            self.velocityy = 0
+            self.directionx = 1  # 1 for moving right, -1 for moving left
+            self.directiony = 1  # 1 for moving down, -1 for moving up
+    claw = Claw()
+    loot = loot()
+
+    def __init__(self, screen, currency): 
+        self.screen = screen
+        self.currency = currency
+        self.running = True
+        self.cdisplay = pygame.font.Font(None, 36)
+    
+    
+    
+    def handle_space(self):
+        self.currency += 100
+
+    def handle_down(self):
+        self.currency -= 10
+        self.claw.velocityx = 0
+        self.claw.velocityy = 5
+
+    def handle_up(self):
+        self.claw.velocityy = 0
+        self.claw.velocityx = 5
+        self.currency = 200
+        self.claw.x = 100
+        self.claw.y = 100
+    
+    def run(self):
+        keyactions = {
+            K_DOWN: self.handle_down,
+            K_UP: self.handle_up,
+            K_SPACE: self.handle_space
+        }
+        
+        while self.currency > 0 and self.running:
+            self.claw.y += self.claw.velocityy * self.claw.directiony
+            self.claw.x += self.claw.velocityx * self.claw.directionx
+            for event in pygame.event.get():
+                if event.type == KEYDOWN:
+                    if event.key in keyactions:
+                        keyactions[event.key]()
+                elif event.type == QUIT:
+                    self.running = False
+            if self.claw.x <= 0 or self.claw.x >= 1700:
+                self.claw.directionx *= -1
+            screen.fill((255, 255, 255))
+            rectangle = pygame.draw.rect(self.screen, (0, 0, 0), (self.claw.x, self.claw.y, 10, 100))
+            loot = pygame.draw.rect(self.screen, (0, 0, 0), (self.loot.lootx, self.loot.looty, 50, 50))
+            if rectangle.colliderect(loot):
+                self.currency += 100
+                self.loot.lootx = random.randint(200, 1400)
+                self.loot.looty = 600
+                self.claw.__init__()
+            if self.claw.y == 600 and rectangle.colliderect(loot) == False:
+                self.claw.__init__()
+            
+            text = self.cdisplay.render("Currency: " + str(self.currency), True, (0, 0, 0))
+            self.screen.blit(text, (10, 10))
+            pygame.display.flip()
+
+        clock.tick(60)
+        pygame.quit()
+class Slotmachine:
+    def __init__(self, screen, currency):
+        self.screen = screen
+        self.currency = currency
+        self.running = True
+        self.cdisplay = pygame.font.Font(None, 36)
+
+    def handle_down(self):
+        roll = random.randint(1, 50)
+        self.screen.fill((255, 255, 255))
+        if roll < 50:
+            pygame.draw.circle(self.screen, (0, 0, 255), (250, 250), 75)
+            text2 = self.cdisplay.render("Go 0/1 irl noob", True, (0, 0, 0))
+            self.screen.blit(text2, (10, 50))
+            self.currency -= 5
+
+        elif roll == 50:
+            pygame.draw.circle(self.screen, (0, 0, 255), (100, 250), 75)
+            pygame.draw.circle(self.screen, (0, 0, 255), (250, 250), 75)
+            pygame.draw.circle(self.screen, (0, 0, 255), (400, 250), 75)
+            text3 = self.cdisplay.render("Wow get a life nerd", True, (0, 0, 0))
+            self.screen.blit(text3, (10, 50))
+            self.currency += 400
+
+    def handle_up(self):
+        self.screen.fill((255, 255, 255))
+        self.currency = 200
+
+    def handle_space(self):
+        self.currency += 100
+
+    def run(self):
+        key_actions = {
+            K_DOWN: self.handle_down,
+            K_UP: self.handle_up,
+            K_SPACE: self.handle_space
+        }
+
+        while self.currency > 0 and self.running:
+            for event in pygame.event.get():
+                if event.type == KEYDOWN:
+                    if event.key in key_actions:
+                        key_actions[event.key]()
+                elif event.type == QUIT:
+                    self.running = False
+                    
+
+            text = self.cdisplay.render("Currency: " + str(self.currency), True, (0, 0, 0))
+            self.screen.blit(text, (10, 10))
+            pygame.display.flip()
+
+        pygame.quit()
+
+screen = pygame.display.set_mode([1800, 1000])
+slotmachine = Slotmachine(screen, currency)
+clawmachine = ClawMachine(screen, currency)
+Roullete = roullete(screen, currency)
+
+while running == True:
+    if not main_menu_loaded:
+        MainMenu()
+        main_menu_loaded = True
+
+    for event in pygame.event.get():
+        if event.type == pygame.MOUSEMOTION:
+            print(event.pos)
+            if 865 <= event.pos[0] <= 907 and 201 <= event.pos[1] <= 294:
+                screen.fill((255, 255, 255))
+                slotmachine.run() #Here the problem starts
+            if 1500 <= event.pos[0] <= 1542 and 201 <= event.pos[1] <= 294:
+                screen.fill((255, 255, 255))
+                clawmachine.run()
+            elif 950 <= event.pos[0] <= 1000 and 201 <= event.pos[1] <= 294:
+                screen.fill((255, 255, 255))
+                Roullete.run()
+        if event.type == pygame.QUIT:
+            running = False
+        if slotmachine.running == False or clawmachine.running == False:
+            running = False
+    try:
+        pygame.display.update()
+    except pygame.error:
+        pass
+    clock.tick(60)
